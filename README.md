@@ -1,8 +1,8 @@
 # File Checker
-This software is able to compare all the files in two different folders by using the MD5 hash. One major use is when the folders are in two different locations. Let's assume that one is on a local PC and the other is on a remote PC. Normally, to compare two folders, we have to copy the remote folder to the local PC. If the folder size is large, Depending on the quality of the internet connection, this process may take a long time.
+This software is able to compare all the files in two different folders by using the MD5 hash. One major use is when the folders are in two different locations. Let's assume that one is on a local PC and the other is on a remote PC. Normally, to compare two folders, we have to copy the remote folder to the local PC. If the folder size is large, depending on the quality of the internet connection, this process may take a long time.
 
 ### So how does File Checker help in this case?
-First, we installed "File Checker" software in both locations and generated an MD5 XML summary file for both folders. Then we can load them into local "File Checker" software and get the results. This may take only a couple of seconds. (Because "File Checker" is lightweight, installing it on a remote machine takes only seconds; simply copying "FileChecker.exe" is sufficient.)
+First, we installed "File Checker" software in both locations and generated MD5 XML summary files for both folders. Then we can load them into local "File Checker" software and get the results. This may take only a couple of seconds. (Because "File Checker" is lightweight, installing it on a remote machine takes only seconds; simply copying "FileChecker.exe" is sufficient.)
 <img src="./Docs/blockDiagram.png">
 
 ## Software 
