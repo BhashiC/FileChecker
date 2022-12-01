@@ -82,6 +82,8 @@ namespace FileChecker
             cbFile1Loaded.IsEnabled = false;
             cbFile2Loaded.IsEnabled = false;
             cbResultsFileLoaded.IsEnabled = false;
+            cmbFilters.ItemsSource = Enum.GetValues(typeof(ComparedResults));
+            cmbFilters.SelectedItem = ComparedResults.None;
 
             Version version = Assembly.GetExecutingAssembly().GetName().Version;
             Title = Title + " " + version.Major + "." + version.Minor + "." + version.Build + " RC" + version.Revision;
@@ -345,6 +347,7 @@ namespace FileChecker
                 dgvResults.ItemsSource = null;
                 _fileCompare = null;
                 cbResultsFileLoaded.IsChecked = false;
+                cmbFilters.SelectedItem = ComparedResults.None;
 
                 if (cbFile1Loaded.IsChecked != true && cbFile2Loaded.IsChecked != true)
                 {
@@ -386,7 +389,6 @@ namespace FileChecker
                 btnCompare.IsEnabled = true;
             }
         }
-
 
         private void BtnBrowseResultsFile_Click(object sender, RoutedEventArgs e)
         {
@@ -441,6 +443,11 @@ namespace FileChecker
             try
             {
                 btnLoadResultsFile.IsEnabled = false;
+                dgvResults.ItemsSource = null;
+                _fileCompare = null;
+                cbResultsFileLoaded.IsChecked = false;
+                cmbFilters.SelectedItem = ComparedResults.None;
+
                 if (string.IsNullOrEmpty(tbSelectResultsFile.Text) || !File.Exists(tbSelectResultsFile.Text) || System.IO.Path.GetExtension(tbSelectResultsFile.Text) != ".xml")
                 {
                     MessageBox.Show("Please select a valid comparison xml file", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -466,6 +473,24 @@ namespace FileChecker
         private void TbSelectResultsFile_TextChanged(object sender, TextChangedEventArgs e)
         {
             cbResultsFileLoaded.IsChecked = false;
+        }
+
+        private void CmbFilters_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var cmbSelectedItem = (ComparedResults)cmbFilters.SelectedItem;
+            if (_fileCompare != null)
+            {
+                if (cmbSelectedItem != ComparedResults.None)
+                {
+                    dgvResults.ItemsSource = null;
+                    var filteredResults = _fileCompare.FullResult.Where(x => x.Result == cmbSelectedItem);
+                    dgvResults.ItemsSource = filteredResults;
+                }
+                else
+                {
+                    dgvResults.ItemsSource = _fileCompare.FullResult;
+                }
+            }
         }
     }
 }

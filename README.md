@@ -5,7 +5,7 @@ This software is able to compare all the files in two different folders by using
 First, we installed "File Checker" software in both locations and generated MD5 XML summary files for both folders. Then we can load them into local "File Checker" software and get the results. This may take only a couple of seconds. (Because "File Checker" is lightweight, installing it on a remote machine takes only seconds; simply copying "FileChecker.exe" is sufficient.)
 <img src="./Docs/blockDiagram.png">
 
-## Software 
+## Version 1.0.0.5
 ### Generate MD5 xml file for a folder
 1. Click "Browse" and select the folder.
 2. Click "Generate" (the progress bar will show the working progress).
@@ -38,3 +38,17 @@ After generating two MD5 XML files, we can next compare them.
 Results are saved in CSV format, making it convenient to open via Microsoft Excel.    
 The file name follows the format "Comparison_yyyy-MM-dd_HH-mm-ss."   
 <img src="./Docs/resultsCsv.png">
+
+## Version 1.0.0.6
+### Load existing results file
+Developed to load an existing comparison XML file (the idea is to share the comparison XML with someone and have them open it using the software).
+1. Click "Browse" and select the comparison XML file.
+2. Click "Load Results" to validate the XML file and display results in the Results section (the "Results File Loaded" checkbox will be marked if validation is successful).
+<img src="./Docs/loadExistingResults.png">
+
+## Version 1.0.0.7
+### Result filter developed
+The user can select which type of result should be displayed in the table.
+<img src="./Docs/filters.png">
+After selecting the filter,
+<img src="./Docs/afterSelectFilter.png">
