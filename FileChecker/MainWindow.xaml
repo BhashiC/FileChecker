@@ -90,8 +90,22 @@
                 </StackPanel>
             </Grid>
         </GroupBox>
-        
-        <GroupBox Name = "gbResults" Header="Results" DockPanel.Dock="Top" BorderBrush="Green">
+            <GroupBox Name = "gbLoadResults" Header="Load Existing Results" DockPanel.Dock="Top" BorderBrush="Orange">
+            <StackPanel>
+                <TextBox 
+                    Name="tbSelectResultsFile" Margin="2,2,2,2"  TextChanged="TbSelectResultsFile_TextChanged">
+                </TextBox>
+                <StackPanel Orientation ="Horizontal">
+                    <Button Name="btnBrowseResultsFile" MinWidth="100" MaxWidth="100" Height="25" HorizontalAlignment="Left" Margin="2,2,2,2" Content="Browse" Click="BtnBrowseResultsFile_Click" >
+                    </Button>
+                    <Button Name="btnLoadResultsFile" MinWidth="100" MaxWidth="100" Height="25" HorizontalAlignment="Left" Margin="2,2,2,2" Content="Load Results" Click="BtnLoadResultsFile_Click" >
+                    </Button>
+                    <CheckBox Name="cbResultsFileLoaded" Content="Results File Loaded" VerticalAlignment="Center" Margin="10,2,2,2">
+                    </CheckBox>
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+            <GroupBox Name = "gbResults" Header="Results" DockPanel.Dock="Top" BorderBrush="Green">
             <DockPanel>
             <GroupBox Name = "gbDirectoryPaths" Header="Folder Paths" DockPanel.Dock="Top" BorderBrush="Green">
                     <StackPanel>

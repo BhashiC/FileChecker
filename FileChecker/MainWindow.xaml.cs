@@ -51,6 +51,8 @@ namespace FileChecker
 
         public string File2OpeningPath { get; set; }
 
+        public string ResultsFileOpeningPath { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -79,6 +81,7 @@ namespace FileChecker
             dgvResults.IsReadOnly = true;
             cbFile1Loaded.IsEnabled = false;
             cbFile2Loaded.IsEnabled = false;
+            cbResultsFileLoaded.IsEnabled = false;
 
             Version version = Assembly.GetExecutingAssembly().GetName().Version;
             Title = Title + " " + version.Major + "." + version.Minor + "." + version.Build + " RC" + version.Revision;
@@ -282,7 +285,6 @@ namespace FileChecker
                 if (string.IsNullOrEmpty(tbSelectFile1.Text) || !File.Exists(tbSelectFile1.Text) || System.IO.Path.GetExtension(tbSelectFile1.Text) != ".xml")
                 {
                     MessageBox.Show("Please select a valid MD5 Data xml file1", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    btnCompare.IsEnabled = true;
                     return;
                 }
                 _file1Checker = Utils.ImportExportUtils.ReadFromXml<Checker>(tbSelectFile1.Text);
@@ -307,7 +309,6 @@ namespace FileChecker
                 if (string.IsNullOrEmpty(tbSelectFile2.Text) || !File.Exists(tbSelectFile2.Text) || System.IO.Path.GetExtension(tbSelectFile2.Text) != ".xml")
                 {
                     MessageBox.Show("Please select a valid data xml file2", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    btnCompare.IsEnabled = true;
                     return;
                 }
                 _file2Checker = Utils.ImportExportUtils.ReadFromXml<Checker>(tbSelectFile2.Text);
@@ -343,6 +344,7 @@ namespace FileChecker
                 btnCompare.IsEnabled = false;
                 dgvResults.ItemsSource = null;
                 _fileCompare = null;
+                cbResultsFileLoaded.IsChecked = false;
 
                 if (cbFile1Loaded.IsChecked != true && cbFile2Loaded.IsChecked != true)
                 {
@@ -383,6 +385,87 @@ namespace FileChecker
             {
                 btnCompare.IsEnabled = true;
             }
+        }
+
+
+        private void BtnBrowseResultsFile_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                btnBrowseResultsFile.IsEnabled = false;
+                OpenFileDialog fileDialog = new OpenFileDialog
+                {
+                    Title = "Browse File",
+                    CheckFileExists = true,
+                    CheckPathExists = true,
+
+                    DefaultExt = "xml",
+                    Filter = "xml files (*.xml)|*.xml",
+                    FilterIndex = 2,
+                    RestoreDirectory = true,
+
+                    ReadOnlyChecked = true,
+                    ShowReadOnly = true
+                };
+
+                // Set opening directory for the File Browser
+                if (!string.IsNullOrEmpty(ResultsFileOpeningPath) && Directory.Exists(ResultsFileOpeningPath))
+                {
+                    fileDialog.InitialDirectory = ResultsFileOpeningPath;
+                }
+                else
+                {
+                    fileDialog.InitialDirectory = ResultsSaveDirectory;
+                }
+
+                if (fileDialog.ShowDialog() == true)
+                {
+                    tbSelectResultsFile.Text = fileDialog.FileName;
+                    ResultsFileOpeningPath = new FileInfo(tbSelectResultsFile.Text).Directory.FullName;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                this.btnBrowseResultsFile.IsEnabled = true;
+            }
+
+            
+        }
+
+        private void BtnLoadResultsFile_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                btnLoadResultsFile.IsEnabled = false;
+                if (string.IsNullOrEmpty(tbSelectResultsFile.Text) || !File.Exists(tbSelectResultsFile.Text) || System.IO.Path.GetExtension(tbSelectResultsFile.Text) != ".xml")
+                {
+                    MessageBox.Show("Please select a valid comparison xml file", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                _fileCompare = Utils.ImportExportUtils.ReadFromXml<Compare>(tbSelectResultsFile.Text);
+                lbFolder1Directory.Content = _fileCompare.MD5File1SelectedFolderPath;
+                lbFolder2Directory.Content = _fileCompare.MD5File2SelectedFolderPath;
+                dgvResults.ItemsSource = _fileCompare.FullResult;
+                cbResultsFileLoaded.IsChecked = true;
+                MessageBox.Show($"Results are successfully loaded", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Comparison xml File load failed!" + ex, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                btnLoadResultsFile.IsEnabled = true;
+            }
+        }
+
+        private void TbSelectResultsFile_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            cbResultsFileLoaded.IsChecked = false;
         }
     }
 }
